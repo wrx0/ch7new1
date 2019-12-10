@@ -152,6 +152,7 @@ public:
         residuals[0] = _observed_x - cx - fx*X/Z;
         residuals[1] = _observed_y - cy - fy*Y/Z;
 
+        //第一帧重投影约束，怎么往里加？
 
         //jacobian of point block
         if(jacobians && jacobians[0]){
@@ -297,6 +298,7 @@ int main(int argc, char **argv) {
             double p3d[3] = {pts_3d[i].x, pts_3d[i].y, pts_3d[i].z};
             CostFunction* costfunction = new BA_all_analytical(pts_2d[i].x, pts_2d[i].y);
             problem.AddResidualBlock(costfunction, NULL, p3d, se3.data());
+            //对于带点BA的情况，需要把第一帧也加进去，但作为常量
             /*
             //解析求导不考虑点
             CostFunction* costfunction = new BA_analytical(pts_2d[i], pts_3d[i]);
